@@ -1288,6 +1288,19 @@
         }
 
         checkAuthAndInit();
+// Tự động đồng bộ và làm mới dữ liệu khi có tab/thiết bị khác thay đổi localStorage
+window.addEventListener('storage', function(e) {
+    if (e.key === 'dtt_clean_db') {
+        db = JSON.parse(e.newValue) || [];
+        renderAll();
+        showToast('Dữ liệu vừa được cập nhật từ tab khác!');
+    } else if (e.key === 'dtt_users') {
+        usersDb = JSON.parse(e.newValue) || [];
+        if (typeof renderStaffTable === 'function' && currentUser && currentUser.role === 'ADMIN') {
+            renderStaffTable();
+        }
+    }
+});
     </script>
 </body>
 </html>
